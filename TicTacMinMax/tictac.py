@@ -38,10 +38,10 @@ def minimax(board, is_max):
     # if X wins, return +1, if O wins, return -1, if tie return 0
     # This is the base case for our recursive minimax function. If there is a winner, we return a score based on who won. 
     # If there is a tie, we return 0. If there is no winner and the board is not full, we continue with the minimax algorithm.
-# X = AI player
-# O = human opponent
+    # X = AI player, the one we want to maximize the score for. 
     if winner == "X":
         return 1
+    # O = human opponent, the one we want to minimize the score for  :(
     if winner == "O":
         return -1
 
@@ -119,4 +119,48 @@ def best_move(board):
 
     return move
 
-move = best_move(board)
+def print_board(board):
+    for row in board:
+        print("|".join(row))
+        print("-"*5)
+
+def human_move(board):
+
+    while True:
+        r = int(input("Row (0-2): "))
+        c = int(input("Col (0-2): "))
+
+        if board[r][c] == " ":
+            board[r][c] = "O"
+            break
+        else:
+            print("Cell already taken!")
+
+while True:
+
+    print_board(board)
+
+    # human turn
+    human_move(board)
+
+    winner = check_winner(board)
+    if winner:
+        print_board(board)
+        print(winner, "wins!")
+        break
+
+    if all(cell != " " for row in board for cell in row):
+        print("Draw!")
+        break
+
+    # AI turn
+    r, c = best_move(board)
+    board[r][c] = "X"
+
+    print("AI plays:", r, c)
+
+    winner = check_winner(board)
+    if winner:
+        print_board(board)
+        print(winner, "wins!")
+        break
